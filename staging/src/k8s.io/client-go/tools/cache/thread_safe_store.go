@@ -18,6 +18,7 @@ package cache
 
 import (
 	"fmt"
+	"k8s.io/klog"
 	"sync"
 
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -70,7 +71,39 @@ func (c *threadSafeMap) Add(key string, obj interface{}) {
 	defer c.lock.Unlock()
 	oldObject := c.items[key]
 	c.items[key] = obj
+
+	klog.Warningf("[JUSTFORDEBUG] threadSafeMap.Add  adding key: %s", key)
 	c.updateIndices(oldObject, obj, key)
+
+	// dump items
+	itemset := sets.String{}
+	for key := range c.items {
+		itemset.Insert(key)
+	}
+	klog.Warningf("[JUSTFORDEBUG] threadSafeMap.Add  key: %s, items: %v", key, itemset.List())
+
+	// dump indexers
+	indexersSet := sets.String{}
+	for indexerName := range c.indexers {
+		indexersSet.Insert(indexerName)
+	}
+	klog.Warningf("[JUSTFORDEBUG] threadSafeMap.Add  key: %s, indexers: %v", key, indexersSet.List())
+
+	// dump indices
+	indeceSet := sets.String{}
+	for indece := range c.indices {
+		indeceSet.Insert(indece)
+	}
+	klog.Warningf("[JUSTFORDEBUG] threadSafeMap.Add  key: %s, indices: %v", key, indeceSet.List())
+
+	// dump index
+	for indexName, index := range c.indices {
+		indexValueSet := sets.String{}
+		for indexValue := range index {
+			indexValueSet.Insert(indexValue)
+		}
+		klog.Warningf("[JUSTFORDEBUG] threadSafeMap.Add  key: %s, loop indices for name: %v, indexValueSet: %v", key, indexName, indexValueSet.List())
+	}
 }
 
 func (c *threadSafeMap) Update(key string, obj interface{}) {
@@ -258,6 +291,9 @@ func (c *threadSafeMap) updateIndices(oldObj interface{}, newObj interface{}, ke
 		if err != nil {
 			panic(fmt.Errorf("unable to calculate an index entry for key %q on index %q: %v", key, name, err))
 		}
+
+		klog.Warningf("[JUSTFORDEBUG] threadSafeMap.updateIndices  key: %s, name: %s, updateIndices: %v", key, name, indexValues)
+
 		index := c.indices[name]
 		if index == nil {
 			index = Index{}
