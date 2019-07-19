@@ -112,15 +112,18 @@ func TestVersionFromNetwork(t *testing.T) {
 		FetcherErrorExpected bool
 		ErrorExpected        bool
 	}
+
+	currentVersion := normalizedBuildVersion(constants.CurrentKubernetesVersion.String())
+
 	cases := map[string]T{
 		"stable":     {"stable-1", "v1.4.6", false, false}, // recursive pointer to stable-1
 		"stable-1":   {"v1.4.6", "v1.4.6", false, false},
 		"stable-1.3": {"v1.3.10", "v1.3.10", false, false},
 		"latest":     {"v1.6.0-alpha.0", "v1.6.0-alpha.0", false, false},
 		"latest-1.3": {"v1.3.11-beta.0", "v1.3.11-beta.0", false, false},
-		"empty":      {"", constants.CurrentKubernetesVersion.String(), true, false},
-		"garbage":    {"<?xml version='1.0'?><Error><Code>NoSuchKey</Code><Message>The specified key does not exist.</Message></Error>", constants.CurrentKubernetesVersion.String(), true, false},
-		"unknown":    {"The requested URL was not found on this server.", constants.CurrentKubernetesVersion.String(), true, false},
+		"empty":      {"", currentVersion, true, false},
+		"garbage":    {"<?xml version='1.0'?><Error><Code>NoSuchKey</Code><Message>The specified key does not exist.</Message></Error>", currentVersion, true, false},
+		"unknown":    {"The requested URL was not found on this server.", currentVersion, true, false},
 	}
 
 	for k, v := range cases {
