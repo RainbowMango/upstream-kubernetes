@@ -300,7 +300,7 @@ func CreateKubeAPIServerConfig(
 		PerConnectionBandwidthLimitBytesPerSec: s.MaxConnectionBytesPerSec,
 	})
 
-	if s.ShowHiddenMetrics != "" {
+	if s.Metrics.ShowHiddenMetrics != "" {
 		metrics.SetShowHidden()
 	}
 

@@ -49,6 +49,7 @@ type ServerRunOptions struct {
 	CloudProvider           *kubeoptions.CloudProviderOptions
 	APIEnablement           *genericoptions.APIEnablementOptions
 	EgressSelector          *genericoptions.EgressSelectorOptions
+	Metrics                 *genericoptions.MetricsOptions
 
 	AllowPrivileged           bool
 	EnableLogsHandler         bool
@@ -78,8 +79,6 @@ type ServerRunOptions struct {
 	ServiceAccountSigningKeyFile     string
 	ServiceAccountIssuer             serviceaccount.TokenGenerator
 	ServiceAccountTokenMaxExpiration time.Duration
-
-	ShowHiddenMetrics string
 }
 
 // NewServerRunOptions creates a new ServerRunOptions object with default parameters
@@ -97,6 +96,7 @@ func NewServerRunOptions() *ServerRunOptions {
 		CloudProvider:           kubeoptions.NewCloudProviderOptions(),
 		APIEnablement:           genericoptions.NewAPIEnablementOptions(),
 		EgressSelector:          genericoptions.NewEgressSelectorOptions(),
+		Metrics:                 genericoptions.NewMetricsOptions(),
 
 		EnableLogsHandler:      true,
 		EventTTL:               1 * time.Hour,
@@ -145,11 +145,7 @@ func (s *ServerRunOptions) Flags() (fss cliflag.NamedFlagSets) {
 	s.APIEnablement.AddFlags(fss.FlagSet("api enablement"))
 	s.EgressSelector.AddFlags(fss.FlagSet("egress selector"))
 	s.Admission.AddFlags(fss.FlagSet("admission"))
-
-	// TODO(RainbowMango): move it to genericoptions before next flag comes.
-	mfs := fss.FlagSet("metrics")
-	mfs.StringVar(&s.ShowHiddenMetrics, "show-hidden-metrics", s.ShowHiddenMetrics,
-		"The kube-apiserver version(x.y) for which you want to show hidden metrics. Only previous minor version is allowed.")
+	s.Metrics.AddFlags(fss.FlagSet("metrics"))
 
 	// Note: the weird ""+ in below lines seems to be the only way to get gofmt to
 	// arrange these text blocks sensibly. Grrr.
