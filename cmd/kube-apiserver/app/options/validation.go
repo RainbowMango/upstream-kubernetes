@@ -24,6 +24,7 @@ import (
 
 	apiextensionsapiserver "k8s.io/apiextensions-apiserver/pkg/apiserver"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
+	"k8s.io/component-base/metrics"
 	aggregatorscheme "k8s.io/kube-aggregator/pkg/apiserver/scheme"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
 	"k8s.io/kubernetes/pkg/features"
@@ -126,6 +127,10 @@ func validateTokenRequest(options *ServerRunOptions) []error {
 	return errs
 }
 
+func validateShowHiddenMetricsVersion(options *ServerRunOptions) []error {
+	return metrics.ValidateShowHiddenMetricsVersion(options.ShowHiddenMetrics)
+}
+
 // Validate checks ServerRunOptions and return a slice of found errs.
 func (s *ServerRunOptions) Validate() []error {
 	var errs []error
@@ -143,6 +148,7 @@ func (s *ServerRunOptions) Validate() []error {
 	errs = append(errs, s.InsecureServing.Validate()...)
 	errs = append(errs, s.APIEnablement.Validate(legacyscheme.Scheme, apiextensionsapiserver.Scheme, aggregatorscheme.Scheme)...)
 	errs = append(errs, validateTokenRequest(s)...)
+	errs = append(errs, validateShowHiddenMetricsVersion(s)...)
 
 	return errs
 }

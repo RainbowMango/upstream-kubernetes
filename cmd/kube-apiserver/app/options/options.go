@@ -78,6 +78,8 @@ type ServerRunOptions struct {
 	ServiceAccountSigningKeyFile     string
 	ServiceAccountIssuer             serviceaccount.TokenGenerator
 	ServiceAccountTokenMaxExpiration time.Duration
+
+	ShowHiddenMetrics string
 }
 
 // NewServerRunOptions creates a new ServerRunOptions object with default parameters
@@ -143,6 +145,11 @@ func (s *ServerRunOptions) Flags() (fss cliflag.NamedFlagSets) {
 	s.APIEnablement.AddFlags(fss.FlagSet("api enablement"))
 	s.EgressSelector.AddFlags(fss.FlagSet("egress selector"))
 	s.Admission.AddFlags(fss.FlagSet("admission"))
+
+	// TODO(RainbowMango): move it to genericoptions before next flag comes.
+	mfs := fss.FlagSet("metrics")
+	mfs.StringVar(&s.ShowHiddenMetrics, "show-hidden-metrics", s.ShowHiddenMetrics,
+		"The kube-apiserver version(x.y) for which you want to show hidden metrics. Only previous minor version is allowed.")
 
 	// Note: the weird ""+ in below lines seems to be the only way to get gofmt to
 	// arrange these text blocks sensibly. Grrr.
