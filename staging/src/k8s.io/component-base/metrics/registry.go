@@ -49,6 +49,50 @@ func shouldHide(currentVersion *semver.Version, deprecatedVersion *semver.Versio
 	return false
 }
 
+func validateShowHiddenMetricsVersion(currentVersion semver.Version, targetVersionStr string) error {
+	if targetVersionStr == "" {
+		return nil
+	}
+
+	// We assume the input target version with the format `x.y`, here simply suffix `0` as patch version.
+	// It helps to compare with current version.
+	pathVersion := fmt.Sprintf("%s.0", targetVersionStr)
+
+	targetVersion, err := semver.Parse(pathVersion)
+	if err != nil {
+		return fmt.Errorf("specified --show-hidden-metrics is invalid: %v", err)
+	}
+
+	maxAllowedVersion, err := semver.Make(fmt.Sprintf("%d.%d.0", currentVersion.Major, currentVersion.Minor))
+	if err != nil {
+		panic("failed to make version from current version")
+	}
+	if targetVersion.GTE(maxAllowedVersion) {
+		return fmt.Errorf("--show-hidden-metrics should less than current minor version")
+	}
+
+	minAllowedVersion, err := semver.Make(fmt.Sprintf("%d.%d.0", currentVersion.Major, currentVersion.Minor-1))
+	if err != nil {
+		panic("failed to make version from current version")
+	}
+
+	if targetVersion.LT(minAllowedVersion) {
+		return fmt.Errorf("--show-hidden-metrics should no less than previous minor version")
+	}
+
+	return nil
+}
+
+// ValidateShowHiddenMetricsVersion checks invalid version for which show hidden metrics.
+func ValidateShowHiddenMetricsVersion(v string) []error {
+	err := validateShowHiddenMetricsVersion(parseVersion(version.Get()), v)
+	if err != nil {
+		return []error{err}
+	}
+
+	return nil
+}
+
 // SetShowHidden will enable showing hidden metrics. This will no-opt
 // after the initial call
 func SetShowHidden() {
