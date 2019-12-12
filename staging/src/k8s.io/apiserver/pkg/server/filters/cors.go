@@ -35,6 +35,7 @@ import (
 // is empty or nil, no CORS support is installed.
 func WithCORS(handler http.Handler, allowedOriginPatterns []string, allowedMethods []string, allowedHeaders []string, exposedHeaders []string, allowCredentials string) http.Handler {
 	if len(allowedOriginPatterns) == 0 {
+		klog.Errorf("[JUSTFORDEBUG] WithCORS quick path")
 		return handler
 	}
 	allowedOriginPatternsREs := allowedOriginRegexps(allowedOriginPatterns)

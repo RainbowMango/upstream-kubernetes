@@ -28,10 +28,12 @@ import (
 	"k8s.io/apiserver/pkg/endpoints/handlers/responsewriters"
 	apirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/client-go/kubernetes/scheme"
+	"k8s.io/klog"
 )
 
 // WithWaitGroup adds all non long-running requests to wait group, which is used for graceful shutdown.
 func WithWaitGroup(handler http.Handler, longRunning apirequest.LongRunningRequestCheck, wg *utilwaitgroup.SafeWaitGroup) http.Handler {
+	klog.Errorf("[JUSTFORDEBUG] WithWaitGroup create a new handler")
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 		requestInfo, ok := apirequest.RequestInfoFrom(ctx)

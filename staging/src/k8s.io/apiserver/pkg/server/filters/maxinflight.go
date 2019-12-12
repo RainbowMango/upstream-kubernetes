@@ -102,6 +102,7 @@ func WithMaxInFlightLimit(
 ) http.Handler {
 	startOnce.Do(startRecordingUsage)
 	if nonMutatingLimit == 0 && mutatingLimit == 0 {
+		klog.Errorf("[JUSTFORDEBUG] WithMaxInFlightLimit quick path")
 		return handler
 	}
 	var nonMutatingChan chan bool

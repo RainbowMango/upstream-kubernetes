@@ -22,10 +22,12 @@ import (
 
 	"k8s.io/apiserver/pkg/endpoints/handlers/responsewriters"
 	"k8s.io/apiserver/pkg/endpoints/request"
+	"k8s.io/klog"
 )
 
 // WithRequestInfo attaches a RequestInfo to the context.
 func WithRequestInfo(handler http.Handler, resolver request.RequestInfoResolver) http.Handler {
+	klog.Errorf("[JUSTFORDEBUG] WithRequestInfo returned a new handler")
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 		info, err := resolver.NewRequestInfo(req)

@@ -45,6 +45,7 @@ const (
 func WithAuthorization(handler http.Handler, a authorizer.Authorizer, s runtime.NegotiatedSerializer) http.Handler {
 	if a == nil {
 		klog.Warningf("Authorization is disabled")
+		klog.Errorf("[JUSTFORDEBUG] WithAuthorization quick path")
 		return handler
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {

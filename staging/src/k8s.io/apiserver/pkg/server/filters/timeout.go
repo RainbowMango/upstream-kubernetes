@@ -31,6 +31,7 @@ import (
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apiserver/pkg/endpoints/metrics"
 	apirequest "k8s.io/apiserver/pkg/endpoints/request"
+	"k8s.io/klog"
 )
 
 var errConnKilled = fmt.Errorf("killing connection/stream because serving request timed out and response had been started")
@@ -38,6 +39,7 @@ var errConnKilled = fmt.Errorf("killing connection/stream because serving reques
 // WithTimeoutForNonLongRunningRequests times out non-long-running requests after the time given by timeout.
 func WithTimeoutForNonLongRunningRequests(handler http.Handler, longRunning apirequest.LongRunningRequestCheck, timeout time.Duration) http.Handler {
 	if longRunning == nil {
+		klog.Errorf("[JUSTFORDEBUG] WithTimeoutForNonLongRunningRequests quick path")
 		return handler
 	}
 	timeoutFunc := func(req *http.Request) (*http.Request, <-chan time.Time, func(), *apierrors.StatusError) {

@@ -39,6 +39,7 @@ import (
 
 // WithImpersonation is a filter that will inspect and check requests that attempt to change the user.Info for their requests
 func WithImpersonation(handler http.Handler, a authorizer.Authorizer, s runtime.NegotiatedSerializer) http.Handler {
+	klog.Errorf("[JUSTFORDEBUG] WithImpersonation Create new handler")
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		impersonationRequests, err := buildImpersonationRequests(req.Header)
 		if err != nil {

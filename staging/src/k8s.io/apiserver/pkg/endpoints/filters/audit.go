@@ -32,6 +32,7 @@ import (
 	"k8s.io/apiserver/pkg/audit/policy"
 	"k8s.io/apiserver/pkg/endpoints/handlers/responsewriters"
 	"k8s.io/apiserver/pkg/endpoints/request"
+	"k8s.io/klog"
 )
 
 // WithAudit decorates a http.Handler with audit logging information for all the
@@ -40,6 +41,7 @@ import (
 // process events. If sink or audit policy is nil, no decoration takes place.
 func WithAudit(handler http.Handler, sink audit.Sink, policy policy.Checker, longRunningCheck request.LongRunningRequestCheck) http.Handler {
 	if sink == nil || policy == nil {
+		klog.Errorf("[JUSTFORDEBUG] WithAudit quick path")
 		return handler
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
