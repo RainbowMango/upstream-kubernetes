@@ -287,8 +287,13 @@ func MachineInfo(nodeName string,
 				// TODO: all the node resources should use ContainerManager.GetCapacity instead of deriving the
 				// capacity for every node status request
 				initialCapacity := capacityFunc()
+				klog.Errorf("[JUSTFORDEBUG] len(initialCapacity): %d", len(initialCapacity))
 				if initialCapacity != nil {
+					for resource, quality := range initialCapacity {
+						klog.Errorf("[JUSTFORDEBUG] resource: %s, quality: %s", resource, quality.String())
+					}
 					if v, exists := initialCapacity[v1.ResourceEphemeralStorage]; exists {
+						klog.Errorf("[JUSTFORDEBUG] Adding resource to node.Status.Capacity. resource: %s, quality: %s", v1.ResourceEphemeralStorage, v.String())
 						node.Status.Capacity[v1.ResourceEphemeralStorage] = v
 					}
 				}
