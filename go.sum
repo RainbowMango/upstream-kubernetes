@@ -393,6 +393,8 @@ github.com/prometheus/common v0.9.1 h1:KOMtN28tlbam3/7ZKEYKHhKoJZYYj3gMH4uc62x7X
 github.com/prometheus/common v0.9.1/go.mod h1:yhUN8i9wzaXS3w1O07YhxHEBxD+W35wd8bs7vj7HSQ4=
 github.com/prometheus/procfs v0.0.11 h1:DhHlBtkHWPYi8O2y31JkK0TF+DGM+51OopZjH/Ia5qI=
 github.com/prometheus/procfs v0.0.11/go.mod h1:lV6e/gmhEcM9IjHGsFOCxxuZ+z1YqCvr4OA4YeYWdaU=
+github.com/promlint/promlint v0.1.0 h1:OPcXCMQRJLaPVSHSyPFIVT3UR/zkcM43L7YISuxM/T4=
+github.com/promlint/promlint v0.1.0/go.mod h1:Jj6DJtKJGFGisieMQAP7vbukz9d7HMQm19jqdV7VD1U=
 github.com/quobyte/api v0.1.2 h1:lPHLsuvtjFyk8WhC4uHoHRkScijIHcffTWBBP+YpzYo=
 github.com/quobyte/api v0.1.2/go.mod h1:jL7lIHrmqQ7yh05OJ+eEEdHr0u/kmT1Ff9iHd+4H6VI=
 github.com/remyoudompheng/bigfft v0.0.0-20170806203942-52369c62f446/go.mod h1:uYEyJGbgTkfkS4+E/PavXkNJcbFIpEtjt2B0KDQ5+9M=

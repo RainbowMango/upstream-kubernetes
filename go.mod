@@ -374,6 +374,7 @@ replace (
 	github.com/prometheus/client_model => github.com/prometheus/client_model v0.2.0
 	github.com/prometheus/common => github.com/prometheus/common v0.9.1
 	github.com/prometheus/procfs => github.com/prometheus/procfs v0.0.11
+	github.com/promlint/promlint => github.com/promlint/promlint v0.1.0
 	github.com/quobyte/api => github.com/quobyte/api v0.1.2
 	github.com/remyoudompheng/bigfft => github.com/remyoudompheng/bigfft v0.0.0-20170806203942-52369c62f446
 	github.com/robfig/cron => github.com/robfig/cron v1.1.0

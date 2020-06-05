@@ -254,6 +254,7 @@ filegroup(
         "//vendor/github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg:all-srcs",
         "//vendor/github.com/prometheus/common/model:all-srcs",
         "//vendor/github.com/prometheus/procfs:all-srcs",
+        "//vendor/github.com/promlint/promlint/pkg/metriclint:all-srcs",
         "//vendor/github.com/quobyte/api:all-srcs",
         "//vendor/github.com/robfig/cron:all-srcs",
         "//vendor/github.com/rubiojr/go-vhd/vhd:all-srcs",
