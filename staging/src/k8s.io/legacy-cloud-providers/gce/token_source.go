@@ -52,7 +52,7 @@ const (
 var (
 	getTokenCounter = metrics.NewCounter(
 		&metrics.CounterOpts{
-			Name:           "get_token_count",
+			Name:           "get_token_total",
 			Help:           "Counter of total Token() requests to the alternate token source",
 			StabilityLevel: metrics.ALPHA,
 		},
