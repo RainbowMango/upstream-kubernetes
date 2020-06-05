@@ -19,7 +19,7 @@ package metrics
 import (
 	"github.com/blang/semver"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/promlint/promlint/metriclint"
+	"github.com/promlint/promlint/pkg/metriclint"
 )
 
 // Counter is our internal representation for our wrapping struct around prometheus
