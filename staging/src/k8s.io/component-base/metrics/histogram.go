@@ -19,6 +19,7 @@ package metrics
 import (
 	"github.com/blang/semver"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promlint/promlint/pkg/metriclint"
 )
 
 // DefBuckets is a wrapper for prometheus.DefBuckets
@@ -47,6 +48,11 @@ type Histogram struct {
 // will be measured until the histogram is registered somewhere.
 func NewHistogram(opts *HistogramOpts) *Histogram {
 	opts.StabilityLevel.setDefaults()
+
+	lintResult := metriclint.LintHistogram(opts.toPromHistogramOpts())
+	if len(lintResult.Issues) > 0 {
+		panic(lintResult.String())
+	}
 
 	h := &Histogram{
 		HistogramOpts: opts,
@@ -97,6 +103,11 @@ type HistogramVec struct {
 // anything unless the collector is first registered, since the metric is lazily instantiated.
 func NewHistogramVec(opts *HistogramOpts, labels []string) *HistogramVec {
 	opts.StabilityLevel.setDefaults()
+
+	lintResult := metriclint.LintHistogramVector(opts.toPromHistogramOpts(), labels)
+	if len(lintResult.Issues) > 0 {
+		panic(lintResult.String())
+	}
 
 	v := &HistogramVec{
 		HistogramVec:   noopHistogramVec,

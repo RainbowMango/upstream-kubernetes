@@ -19,6 +19,7 @@ package metrics
 import (
 	"github.com/blang/semver"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promlint/promlint/pkg/metriclint"
 )
 
 // Summary is our internal representation for our wrapping struct around prometheus
@@ -38,6 +39,11 @@ type Summary struct {
 // DEPRECATED: as per the metrics overhaul KEP
 func NewSummary(opts *SummaryOpts) *Summary {
 	opts.StabilityLevel.setDefaults()
+
+	lintResult := metriclint.LintSummary(opts.toPromSummaryOpts())
+	if len(lintResult.Issues) > 0 {
+		panic(lintResult.String())
+	}
 
 	s := &Summary{
 		SummaryOpts: opts,
@@ -92,6 +98,11 @@ type SummaryVec struct {
 // DEPRECATED: as per the metrics overhaul KEP
 func NewSummaryVec(opts *SummaryOpts, labels []string) *SummaryVec {
 	opts.StabilityLevel.setDefaults()
+
+	lintResult := metriclint.LintSummaryVector(opts.toPromSummaryOpts(), labels)
+	if len(lintResult.Issues) > 0 {
+		panic(lintResult.String())
+	}
 
 	v := &SummaryVec{
 		SummaryOpts:    opts,

@@ -19,6 +19,7 @@ package metrics
 import (
 	"github.com/blang/semver"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promlint/promlint/pkg/metriclint"
 
 	"k8s.io/component-base/version"
 )
@@ -37,6 +38,11 @@ type Gauge struct {
 // registered, since the metric is lazily instantiated.
 func NewGauge(opts *GaugeOpts) *Gauge {
 	opts.StabilityLevel.setDefaults()
+
+	lintResult := metriclint.LintGauge(opts.toPromGaugeOpts())
+	if len(lintResult.Issues) > 0 {
+		panic(lintResult.String())
+	}
 
 	kc := &Gauge{
 		GaugeOpts:  opts,
@@ -87,6 +93,11 @@ type GaugeVec struct {
 // registered, since the metric is lazily instantiated.
 func NewGaugeVec(opts *GaugeOpts, labels []string) *GaugeVec {
 	opts.StabilityLevel.setDefaults()
+
+	lintResult := metriclint.LintGaugeVector(opts.toPromGaugeOpts(), labels)
+	if len(lintResult.Issues) > 0 {
+		panic(lintResult.String())
+	}
 
 	cv := &GaugeVec{
 		GaugeVec:       noopGaugeVec,

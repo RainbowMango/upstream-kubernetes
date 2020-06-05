@@ -93,6 +93,11 @@ type CounterVec struct {
 func NewCounterVec(opts *CounterOpts, labels []string) *CounterVec {
 	opts.StabilityLevel.setDefaults()
 
+	lintResult := metriclint.LintCounterVector(opts.toPromCounterOpts(), labels)
+	if len(lintResult.Issues) > 0 {
+		panic(lintResult.String())
+	}
+
 	cv := &CounterVec{
 		CounterVec:     noopCounterVec,
 		CounterOpts:    opts,
