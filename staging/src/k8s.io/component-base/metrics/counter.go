@@ -19,6 +19,7 @@ package metrics
 import (
 	"github.com/blang/semver"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/promlint/promlint/metriclint"
 )
 
 // Counter is our internal representation for our wrapping struct around prometheus
@@ -35,6 +36,12 @@ type Counter struct {
 // registered, since the metric is lazily instantiated.
 func NewCounter(opts *CounterOpts) *Counter {
 	opts.StabilityLevel.setDefaults()
+
+	lintResult := metriclint.LintCounter(opts.toPromCounterOpts())
+	if len(lintResult.Issues) > 0 {
+		errMsg := lintResult.String()
+		panic(errMsg)
+	}
 
 	kc := &Counter{
 		CounterOpts: opts,
