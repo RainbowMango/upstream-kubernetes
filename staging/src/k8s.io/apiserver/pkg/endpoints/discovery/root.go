@@ -21,13 +21,15 @@ import (
 	"sync"
 
 	restful "github.com/emicklei/go-restful"
+	"k8s.io/klog/v2"
+
+	"k8s.io/apiserver/pkg/endpoints/handlers/negotiation"
+	"k8s.io/apiserver/pkg/endpoints/handlers/responsewriters"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
-	"k8s.io/apiserver/pkg/endpoints/handlers/negotiation"
-	"k8s.io/apiserver/pkg/endpoints/handlers/responsewriters"
 )
 
 // GroupManager is an interface that allows dynamic mutation of the existing webservice to handle
@@ -72,6 +74,7 @@ func NewRootAPIsHandler(addresses Addresses, serializer runtime.NegotiatedSerial
 func (s *rootAPIsHandler) AddGroup(apiGroup metav1.APIGroup) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
+	klog.Infof("[JUSTFORDEBUG] Adding Group: %s", apiGroup.Name)
 
 	_, alreadyExists := s.apiGroups[apiGroup.Name]
 
@@ -84,6 +87,7 @@ func (s *rootAPIsHandler) AddGroup(apiGroup metav1.APIGroup) {
 func (s *rootAPIsHandler) RemoveGroup(groupName string) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
+	klog.Infof("[JUSTFORDEBUG] Removing Group: %s", groupName)
 
 	delete(s.apiGroups, groupName)
 	for i := range s.apiGroupNames {
@@ -97,6 +101,8 @@ func (s *rootAPIsHandler) RemoveGroup(groupName string) {
 func (s *rootAPIsHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	s.lock.RLock()
 	defer s.lock.RUnlock()
+
+	klog.Infof("[JUSTFORDEBUG] Requesting Group")
 
 	orderedGroups := []metav1.APIGroup{}
 	for _, groupName := range s.apiGroupNames {
